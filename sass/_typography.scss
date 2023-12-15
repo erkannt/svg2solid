@@ -1,0 +1,56 @@
+body {
+  font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+  font-weight: normal;
+  font-weight: normal;
+  line-height: 1.6;
+  color: var(--black);
+  background-color: var(--off-white);
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: bold;
+    line-height: 1.1;
+  }
+
+  h1 {
+    font-size: var(--step-5);
+    margin-bottom: var(--space-l);
+  }
+  h2 {
+    font-size: var(--step-4);
+    margin-bottom: var(--space-m);
+  }
+  h3 {
+    font-size: var(--step-3);
+    margin-bottom: var(--space-s);
+  }
+  h4 {
+    font-size: var(--step-2);
+    margin-bottom: var(--space-xs);
+  }
+  h5 {
+    font-size: var(--step-1);
+    margin-bottom: var(--space-xs);
+  }
+  h6 {
+    font-size: var(--step-1);
+    margin-bottom: var(--space-xs);
+  }
+
+  a {
+    color: var(--link);
+    text-underline-offset: 0.1578em;
+
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  p {
+    margin-bottom: var(--space-xs);
+  }
+}

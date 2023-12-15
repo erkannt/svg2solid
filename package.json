@@ -1,0 +1,18 @@
+{
+  "name": "crop-and-rotate",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.10.2",
+    "@types/file-saver": "^2.0.7",
+    "@types/jsdom": "^21.1.5",
+    "@types/node": "^20.9.0",
+    "buffer": "^6.0.3",
+    "parcel": "^2.10.2",
+    "prettier": "^3.0.3",
+    "process": "^0.11.10",
+    "typescript": "^5.2.2"
+  }
+}

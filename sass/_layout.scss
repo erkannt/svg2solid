@@ -1,0 +1,18 @@
+body {
+  padding: var(--space-2xl) var(--space-s);
+  margin: 0 auto;
+  max-width: 55rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  main {
+    flex-grow: 1;
+  }
+}
+
+footer {
+  border-top: 3px solid var(--red);
+  padding-top: var(--space-xl);
+  margin-top: var(--space-3xl);
+}
