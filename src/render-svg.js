@@ -29,7 +29,7 @@ export const renderSVG = (extrusion, svg) => {
       const mesh = new THREE.Mesh(meshGeometry, fillMaterial);
       const lines = new THREE.LineSegments(linesGeometry, stokeMaterial);
 
-      colorHex = path.color.getHexString();
+      const colorHex = path.color.getHexString();
       if (!byColor.has(colorHex)) {
         byColor.set(colorHex, [{ mesh, shape, lines, depth: extrusion }]);
       } else {
