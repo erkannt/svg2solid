@@ -90,27 +90,7 @@ const setupScene = (container) => {
   });
   animate();
 
-  return { camera, controls, scene };
-};
-// Inspired by https://discourse.threejs.org/t/camera-zoom-to-fit-object/936/3
-const fitCameraToObject = (camera, object, controls) => {
-  const boundingBox = new THREE.Box3().setFromObject(object);
-  const center = boundingBox.getCenter(new THREE.Vector3());
-  const size = boundingBox.getSize(new THREE.Vector3());
-  const offset = 1.25;
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const fov = camera.fov * (Math.PI / 180);
-  const cameraZ = Math.abs((maxDim / 4) * Math.tan(fov * 2)) * offset;
-  const minZ = boundingBox.min.z;
-  const cameraToFarEdge = minZ < 0 ? -minZ + cameraZ : cameraZ - minZ;
-
-  controls.target = center;
-  controls.maxDistance = cameraToFarEdge * 2;
-  controls.minDistance = cameraToFarEdge * 0.5;
-  controls.saveState();
-  camera.position.z = cameraZ;
-  camera.far = cameraToFarEdge * 3;
-  camera.updateProjectionMatrix();
+  return { scene };
 };
 // example.js
 const svg = `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="100%" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xml:space="preserve" width="100%" version="1.1" viewBox="0 0 24 24">
@@ -120,19 +100,15 @@ const svg = `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w
 </g>
 </svg>`;
 // main.js
-const defaultExtrusion = 10;
+const defaultExtrusion = 1;
 const app = document.querySelector('#sceneContainer');
-const focusButton = document.querySelector('#focus');
-const extrusionInput = document.querySelector('#input');
-const { scene, camera, controls } = setupScene(app);
+const extrusionInput = document.querySelector('#extrusionDepth');
+const { scene } = setupScene(app);
 const { object, update } = renderSVG(defaultExtrusion, svg);
 
 scene.add(object);
 
 extrusionInput.addEventListener('input', () => {
   update(Number(extrusionInput.value));
-});
-focusButton.addEventListener('click', () => {
-  fitCameraToObject(camera, object, controls);
 });
 extrusionInput.value = defaultExtrusion;
