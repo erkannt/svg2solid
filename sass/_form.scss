@@ -1,7 +1,10 @@
 fieldset {
   padding: var(--space-xs);
+  display: flex;
+  flex-direction: column;
 
   ul {
+    flex-grow: 1;
     list-style: none;
     padding: 0;
     margin-bottom: var(--space-l);
