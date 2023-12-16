@@ -27,6 +27,7 @@ const renderDepthInputs = () => {
     label.innerHTML = color;
     label.setAttribute('for', color);
     input.setAttribute('type', 'number');
+    input.setAttribute('step', '0.1');
     input.setAttribute('id', color);
     input.value = colorShapeData[0].depth;
     input.addEventListener('input', (event) => {

@@ -18,9 +18,12 @@ export const renderSVG = (extrusion, svg) => {
 
     shapes.forEach((shape) => {
       const meshGeometry = new THREE.ExtrudeGeometry(shape, {
-        depth: extrusion,
+        depth: Math.abs(extrusion),
         bevelEnabled: false,
       });
+      if (extrusion < 0) {
+        meshGeometry.translate(0, 0, extrusion);
+      }
       const linesGeometry = new THREE.EdgesGeometry(meshGeometry);
       const fillMaterial = new THREE.MeshBasicMaterial({ color: path.color });
       const mesh = new THREE.Mesh(meshGeometry, fillMaterial);
