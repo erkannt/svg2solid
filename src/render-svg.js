@@ -5,7 +5,8 @@ const stokeMaterial = new THREE.LineBasicMaterial({
   color: '#adb5bd',
 });
 
-export const renderSVG = (extrusion, svg) => {
+export const renderSVG = (svg) => {
+  const defaultExtrusion = 1;
   const loader = new SVGLoader();
   const svgData = loader.parse(svg);
   const svgGroup = new THREE.Group();
@@ -18,12 +19,9 @@ export const renderSVG = (extrusion, svg) => {
 
     shapes.forEach((shape) => {
       const meshGeometry = new THREE.ExtrudeGeometry(shape, {
-        depth: Math.abs(extrusion),
+        depth: defaultExtrusion,
         bevelEnabled: false,
       });
-      if (extrusion < 0) {
-        meshGeometry.translate(0, 0, extrusion);
-      }
       const linesGeometry = new THREE.EdgesGeometry(meshGeometry);
       const fillMaterial = new THREE.MeshBasicMaterial({ color: path.color });
       const mesh = new THREE.Mesh(meshGeometry, fillMaterial);
@@ -31,9 +29,9 @@ export const renderSVG = (extrusion, svg) => {
 
       const colorHex = path.color.getHexString();
       if (!byColor.has(colorHex)) {
-        byColor.set(colorHex, [{ mesh, shape, lines, depth: extrusion }]);
+        byColor.set(colorHex, [{ mesh, shape, lines, depth: defaultExtrusion }]);
       } else {
-        byColor.get(colorHex).push({ mesh, shape, lines, depth: extrusion });
+        byColor.get(colorHex).push({ mesh, shape, lines, depth: defaultExtrusion });
       }
 
       updateMap.push({ shape, mesh, lines });
