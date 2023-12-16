@@ -16,3 +16,9 @@ footer {
   padding-top: var(--space-xl);
   margin-top: var(--space-3xl);
 }
+
+#sceneContainer {
+  border: 1px solid var(--black);
+  height: 600px;
+  width: 100%;
+}

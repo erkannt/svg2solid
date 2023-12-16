@@ -15,7 +15,7 @@ export const setupScene = (container) => {
     requestAnimationFrame(animate);
   };
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
   scene.add(ambientLight, pointLight);
   camera.position.z = 50;
   camera.position.x = 50;
@@ -24,7 +24,8 @@ export const setupScene = (container) => {
 
   container.append(renderer.domElement);
   window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
