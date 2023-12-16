@@ -9,9 +9,11 @@ const svg = `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w
 </svg>`;
 
 const defaultExtrusion = 1;
-const app = document.querySelector('#sceneContainer');
+const sceneContainer = document.querySelector('#sceneContainer');
 const extrusionInput = document.querySelector('#extrusionDepth');
-const { scene } = setupScene(app);
+const svgFileInput = document.querySelector('#svgFile');
+
+const { scene } = setupScene(sceneContainer);
 const { object, update } = renderSVG(defaultExtrusion, svg);
 scene.add(object);
 
@@ -23,7 +25,7 @@ const loadSvg = (object, update) => (svgData) => {
   scene.add(object);
 };
 
-document.getElementById('svgFile').addEventListener('change', function (event) {
+svgFileInput.addEventListener('change', function (event) {
   var reader = new FileReader();
   reader.onload = function (event) {
     var svgData = event.target.result;
