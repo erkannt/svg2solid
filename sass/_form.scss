@@ -2,6 +2,25 @@ fieldset {
   border: 1px solid var(--black);
   padding: var(--space-xs);
   margin-bottom: var(--space-m);
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: var(--space-l);
+  }
+
+  li {
+    display: flex;
+    text-transform: uppercase;
+    font-family: monospace;
+    align-items: center;
+    margin-bottom: var(--space-2xs);
+
+    label {
+      margin: 0;
+      margin-right: var(--space-m);
+    }
+  }
 }
 
 label {
@@ -11,7 +30,7 @@ label {
 
 input {
   display: block;
-  margin-bottom: var(--space-s);
+  margin-bottom: var(--space-l);
 }
 
 input:last-child {
