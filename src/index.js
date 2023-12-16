@@ -1,5 +1,8 @@
 import { renderSVG } from './render-svg';
 import { setupScene } from './setup-scene';
+import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
 
 const svg = `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="100%" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xml:space="preserve" width="100%" version="1.1" viewBox="0 0 24 24">
 <defs/>
@@ -43,5 +46,17 @@ extrusionInput.addEventListener('input', () => {
 extrusionInput.value = defaultExtrusion;
 
 downloadButton.addEventListener('click', () => {
-  console.log('download');
+  const exporter = new STLExporter();
+  const result = [exporter.parse(state.scene, { binary: false })];
+  const zip = new JSZip();
+  for (let i = 0; i < result.length; i++) {
+    zip.file(`${i}.stl`, result[i]);
+  }
+  zip
+    .generateAsync({
+      type: 'blob',
+    })
+    .then(function (content) {
+      saveAs(content, 'svg2solid.zip');
+    });
 });
