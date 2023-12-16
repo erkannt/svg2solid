@@ -7,8 +7,15 @@ fieldset {
     margin-bottom: var(--space-l);
   }
 
+  span {
+    border: 1px solid var(--black);
+    height: 1rem;
+    width: 1rem;
+  }
+
   li {
     display: flex;
+    gap: var(--space-xs);
     text-transform: uppercase;
     font-family: monospace;
     align-items: center;
@@ -16,7 +23,6 @@ fieldset {
 
     label {
       margin: 0;
-      margin-right: var(--space-m);
     }
   }
 }

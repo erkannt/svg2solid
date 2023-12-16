@@ -23,9 +23,11 @@ const renderDepthInputs = () => {
   for (const [color, colorShapeData] of state.byColor) {
     const item = document.createElement('li');
     const label = document.createElement('label');
+    const swatch = document.createElement('span');
     const input = document.createElement('input');
     label.innerHTML = color;
     label.setAttribute('for', color);
+    swatch.setAttribute('style', `background-color: #${color}`);
     input.setAttribute('type', 'number');
     input.setAttribute('step', '0.1');
     input.setAttribute('id', color);
@@ -35,6 +37,7 @@ const renderDepthInputs = () => {
     });
 
     item.appendChild(label);
+    item.appendChild(swatch);
     item.appendChild(input);
     depthsContainer.appendChild(item);
   }
