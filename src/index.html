@@ -16,18 +16,19 @@
   <body>
     <main>
       <h1>SVG ➠ multicolour print</h1>
+      <div class="application">
+        <fieldset class="application__inputs">
+          <label for="svgFile">Choose an SVG file</label>
+          <input type="file" id="svgFile" name="" accept=".svg" />
 
-      <fieldset>
-        <label for="svgFile">Choose an SVG file</label>
-        <input type="file" id="svgFile" name="" accept=".svg" />
+          <p>Set extrusion depth</p>
+          <ul id="depths"></ul>
 
-        <p>Set extrusion depth</p>
-        <ul id="depths"></ul>
+          <button id="download">Download STLs</button>
+        </fieldset>
 
-        <button id="download">Download STLs</button>
-      </fieldset>
-
-      <div id="sceneContainer"></div>
+        <div id="sceneContainer" class="application__rendering"></div>
+      </div>
     </main>
 
     <footer>

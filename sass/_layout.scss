@@ -1,7 +1,7 @@
 body {
   padding: var(--space-2xl) var(--space-s);
   margin: 0 auto;
-  max-width: 55rem;
+  max-width: 1200px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -11,14 +11,24 @@ body {
   }
 }
 
+.application {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+}
+
+.application__inputs {
+  border: 1px solid var(--black);
+}
+
+.application__rendering {
+  border: 1px solid var(--black);
+  min-width: 600px;
+  min-height: 600px;
+}
+
 footer {
   border-top: 3px solid var(--red);
   padding-top: var(--space-xl);
   margin-top: var(--space-3xl);
-}
-
-#sceneContainer {
-  border: 1px solid var(--black);
-  height: 600px;
-  width: 100%;
 }
