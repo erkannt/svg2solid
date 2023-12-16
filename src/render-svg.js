@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
-const fillMaterial = new THREE.MeshBasicMaterial({ color: '#F3FBFB' });
 const stokeMaterial = new THREE.LineBasicMaterial({
   color: '#00A5E6',
 });
@@ -23,11 +22,12 @@ export const renderSVG = (extrusion, svg) => {
         bevelEnabled: false,
       });
       const linesGeometry = new THREE.EdgesGeometry(meshGeometry);
+      const fillMaterial = new THREE.MeshBasicMaterial({ color: path.color });
       const mesh = new THREE.Mesh(meshGeometry, fillMaterial);
       const lines = new THREE.LineSegments(linesGeometry, stokeMaterial);
 
       updateMap.push({ shape, mesh, lines });
-      svgGroup.add(mesh, lines);
+      svgGroup.add(mesh);
     });
   });
 
