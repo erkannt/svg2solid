@@ -15,26 +15,28 @@ const svgFileInput = document.querySelector('#svgFile');
 
 const { scene } = setupScene(sceneContainer);
 const { object, update } = renderSVG(defaultExtrusion, svg);
-scene.add(object);
 
-const loadSvg = (object, update) => (svgData) => {
-  const { object, update } = renderSVG(defaultExtrusion, svgData);
-  while (scene.children.length > 0) {
-    scene.remove(scene.children[0]);
-  }
-  scene.add(object);
+var state = {
+  scene,
+  sceneUpdate: update,
 };
+state.scene.add(object);
 
 svgFileInput.addEventListener('change', function (event) {
   var reader = new FileReader();
   reader.onload = function (event) {
     var svgData = event.target.result;
-    loadSvg(object, update)(svgData);
+    const { object, update } = renderSVG(defaultExtrusion, svgData);
+    while (state.scene.children.length > 0) {
+      state.scene.remove(scene.children[0]);
+    }
+    state.scene.add(object);
+    state.sceneUpdate = update;
   };
   reader.readAsText(event.target.files[0]);
 });
 
 extrusionInput.addEventListener('input', () => {
-  update(Number(extrusionInput.value));
+  state.sceneUpdate(Number(extrusionInput.value));
 });
 extrusionInput.value = defaultExtrusion;
