@@ -1,5 +1,6 @@
 import { renderSVG } from './render-svg';
 import { setupScene } from './setup-scene';
+import * as THREE from 'three';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
@@ -18,10 +19,11 @@ const svgFileInput = document.querySelector('#svgFile');
 const downloadButton = document.querySelector('#download');
 
 const { scene } = setupScene(sceneContainer);
-const { object, update } = renderSVG(defaultExtrusion, svg);
+const { object, update, byColor } = renderSVG(defaultExtrusion, svg);
 
 var state = {
   scene,
+  byColor,
   sceneUpdate: update,
 };
 state.scene.add(object);
@@ -30,12 +32,13 @@ svgFileInput.addEventListener('change', function (event) {
   var reader = new FileReader();
   reader.onload = function (event) {
     var svgData = event.target.result;
-    const { object, update } = renderSVG(defaultExtrusion, svgData);
+    const { object, update, byColor } = renderSVG(defaultExtrusion, svgData);
     while (state.scene.children.length > 0) {
       state.scene.remove(scene.children[0]);
     }
     state.scene.add(object);
     state.sceneUpdate = update;
+    state.byColor = byColor;
   };
   reader.readAsText(event.target.files[0]);
 });
@@ -47,10 +50,12 @@ extrusionInput.value = defaultExtrusion;
 
 downloadButton.addEventListener('click', () => {
   const exporter = new STLExporter();
-  const result = [exporter.parse(state.scene, { binary: false })];
   const zip = new JSZip();
-  for (let i = 0; i < result.length; i++) {
-    zip.file(`${i}.stl`, result[i]);
+  for (const [color, meshes] of state.byColor) {
+    const scene = new THREE.Scene();
+    scene.add(...meshes);
+    const result = exporter.parse(scene, { binary: false });
+    zip.file(`${color}.stl`, result);
   }
   zip
     .generateAsync({

@@ -10,6 +10,7 @@ export const renderSVG = (extrusion, svg) => {
   const svgData = loader.parse(svg);
   const svgGroup = new THREE.Group();
   const updateMap = [];
+  const byColor = new Map();
 
   svgGroup.scale.y *= -1;
   svgData.paths.forEach((path) => {
@@ -24,6 +25,13 @@ export const renderSVG = (extrusion, svg) => {
       const fillMaterial = new THREE.MeshBasicMaterial({ color: path.color });
       const mesh = new THREE.Mesh(meshGeometry, fillMaterial);
       const lines = new THREE.LineSegments(linesGeometry, stokeMaterial);
+
+      colorHex = path.color.getHexString();
+      if (!byColor.has(colorHex)) {
+        byColor.set(colorHex, [mesh]);
+      } else {
+        byColor.get(colorHex).push(mesh);
+      }
 
       updateMap.push({ shape, mesh, lines });
       svgGroup.add(mesh, lines);
@@ -43,6 +51,7 @@ export const renderSVG = (extrusion, svg) => {
 
   return {
     object: svgGroup,
+    byColor,
     update(extrusion) {
       updateMap.forEach((updateDetails) => {
         const meshGeometry = new THREE.ExtrudeGeometry(updateDetails.shape, {
