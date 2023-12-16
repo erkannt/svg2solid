@@ -14,9 +14,30 @@ const svg = `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w
 
 const defaultExtrusion = 1;
 const sceneContainer = document.querySelector('#sceneContainer');
-const extrusionInput = document.querySelector('#extrusionDepth');
+const depthsContainer = document.querySelector('#depths');
 const svgFileInput = document.querySelector('#svgFile');
 const downloadButton = document.querySelector('#download');
+
+const renderDepthInputs = () => {
+  depthsContainer.innerHTML = '';
+  for (const [color, colorShapeData] of state.byColor) {
+    item = document.createElement('li');
+    label = document.createElement('label');
+    input = document.createElement('input');
+    label.innerHTML = color;
+    label.setAttribute('for', color);
+    input.setAttribute('type', 'number');
+    input.setAttribute('id', color);
+    input.value = colorShapeData[0].depth;
+    input.addEventListener('input', (event) => {
+      state.sceneUpdate(Number(event.currentTarget.value), color);
+    });
+
+    item.appendChild(label);
+    item.appendChild(input);
+    depthsContainer.appendChild(item);
+  }
+};
 
 const { scene } = setupScene(sceneContainer);
 const { object, update, byColor } = renderSVG(defaultExtrusion, svg);
@@ -39,14 +60,10 @@ svgFileInput.addEventListener('change', function (event) {
     state.scene.add(object);
     state.sceneUpdate = update;
     state.byColor = byColor;
+    renderDepthInputs();
   };
   reader.readAsText(event.target.files[0]);
 });
-
-extrusionInput.addEventListener('input', () => {
-  state.sceneUpdate(Number(extrusionInput.value), '000000');
-});
-extrusionInput.value = defaultExtrusion;
 
 downloadButton.addEventListener('click', () => {
   const exporter = new STLExporter();

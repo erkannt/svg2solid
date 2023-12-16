@@ -28,9 +28,9 @@ export const renderSVG = (extrusion, svg) => {
 
       colorHex = path.color.getHexString();
       if (!byColor.has(colorHex)) {
-        byColor.set(colorHex, [{ mesh, shape, lines }]);
+        byColor.set(colorHex, [{ mesh, shape, lines, depth: extrusion }]);
       } else {
-        byColor.get(colorHex).push({ mesh, shape, lines });
+        byColor.get(colorHex).push({ mesh, shape, lines, depth: extrusion });
       }
 
       updateMap.push({ shape, mesh, lines });
@@ -53,9 +53,8 @@ export const renderSVG = (extrusion, svg) => {
     object: svgGroup,
     byColor,
     update(extrusion, colorHex) {
+      console.log('>>>', colorHex, extrusion);
       const toUpdate = byColor.get(colorHex);
-      console.log('>>>', Array.from(byColor.keys()));
-      console.log('>>>', colorHex);
       console.log('>>>', toUpdate);
       toUpdate.forEach((updateDetails) => {
         const meshGeometry = new THREE.ExtrudeGeometry(updateDetails.shape, {
