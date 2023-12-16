@@ -28,9 +28,9 @@ export const renderSVG = (extrusion, svg) => {
 
       colorHex = path.color.getHexString();
       if (!byColor.has(colorHex)) {
-        byColor.set(colorHex, [mesh]);
+        byColor.set(colorHex, [{ mesh, shape, lines }]);
       } else {
-        byColor.get(colorHex).push(mesh);
+        byColor.get(colorHex).push({ mesh, shape, lines });
       }
 
       updateMap.push({ shape, mesh, lines });

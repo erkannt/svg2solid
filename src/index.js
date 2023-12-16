@@ -51,9 +51,11 @@ extrusionInput.value = defaultExtrusion;
 downloadButton.addEventListener('click', () => {
   const exporter = new STLExporter();
   const zip = new JSZip();
-  for (const [color, meshes] of state.byColor) {
+  for (const [color, colorShapeData] of state.byColor) {
     const scene = new THREE.Scene();
-    scene.add(...meshes);
+    colorShapeData.forEach((data) => {
+      scene.add(data.mesh);
+    });
     const result = exporter.parse(scene, { binary: false });
     zip.file(`${color}.stl`, result);
   }
