@@ -21,9 +21,9 @@ const downloadButton = document.querySelector('#download');
 const renderDepthInputs = () => {
   depthsContainer.innerHTML = '';
   for (const [color, colorShapeData] of state.byColor) {
-    item = document.createElement('li');
-    label = document.createElement('label');
-    input = document.createElement('input');
+    const item = document.createElement('li');
+    const label = document.createElement('label');
+    const input = document.createElement('input');
     label.innerHTML = color;
     label.setAttribute('for', color);
     input.setAttribute('type', 'number');
