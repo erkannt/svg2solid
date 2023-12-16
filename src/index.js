@@ -12,6 +12,7 @@ const defaultExtrusion = 1;
 const sceneContainer = document.querySelector('#sceneContainer');
 const extrusionInput = document.querySelector('#extrusionDepth');
 const svgFileInput = document.querySelector('#svgFile');
+const downloadButton = document.querySelector('#download');
 
 const { scene } = setupScene(sceneContainer);
 const { object, update } = renderSVG(defaultExtrusion, svg);
@@ -40,3 +41,7 @@ extrusionInput.addEventListener('input', () => {
   state.sceneUpdate(Number(extrusionInput.value));
 });
 extrusionInput.value = defaultExtrusion;
+
+downloadButton.addEventListener('click', () => {
+  console.log('download');
+});
