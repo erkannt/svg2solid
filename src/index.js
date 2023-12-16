@@ -12,78 +12,89 @@ const exampleSvgData = `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="h
 </g>
 </svg>`;
 
-const sceneContainer = document.querySelector('#sceneContainer');
-const depthsContainer = document.querySelector('#depths');
-const svgFileInput = document.querySelector('#svgFile');
-const downloadButton = document.querySelector('#download');
+const App = (() => {
+  var state = {
+    scene: setupScene(document.querySelector('#sceneContainer')),
+  };
 
-const renderDepthInputs = () => {
-  depthsContainer.innerHTML = '';
-  for (const [color, colorShapeData] of state.byColor) {
-    const item = document.createElement('li');
-    const label = document.createElement('label');
-    const swatch = document.createElement('span');
-    const input = document.createElement('input');
-    label.innerHTML = color;
-    label.setAttribute('for', color);
-    swatch.setAttribute('style', `background-color: #${color}`);
-    input.setAttribute('type', 'number');
-    input.setAttribute('step', '0.1');
-    input.setAttribute('id', color);
-    input.value = colorShapeData[0].depth;
-    input.addEventListener('input', (event) => {
-      state.sceneUpdate(Number(event.currentTarget.value), color);
-    });
-
-    item.appendChild(label);
-    item.appendChild(swatch);
-    item.appendChild(input);
-    depthsContainer.appendChild(item);
-  }
-};
-
-const { scene } = setupScene(sceneContainer);
-const { object, update, byColor } = renderSVG(exampleSvgData);
-
-var state = {
-  scene,
-  byColor,
-  sceneUpdate: update,
-};
-state.scene.add(object);
-
-svgFileInput.addEventListener('change', function (event) {
-  var reader = new FileReader();
-  reader.onload = function (event) {
-    var svgData = event.target.result;
+  const loadSvg = (svgData) => {
     const { object, update, byColor } = renderSVG(svgData);
     while (state.scene.children.length > 0) {
-      state.scene.remove(scene.children[0]);
+      state.scene.remove(state.scene.children[0]);
     }
     state.scene.add(object);
     state.sceneUpdate = update;
     state.byColor = byColor;
-    renderDepthInputs();
+  };
+
+  const renderDepthInputs = () => {
+    const depthsContainer = document.querySelector('#depths');
+    depthsContainer.innerHTML = '';
+    for (const [color, colorShapeData] of state.byColor) {
+      const item = document.createElement('li');
+      const label = document.createElement('label');
+      const swatch = document.createElement('span');
+      const input = document.createElement('input');
+      label.innerHTML = color;
+      label.setAttribute('for', color);
+      swatch.setAttribute('style', `background-color: #${color}`);
+      input.setAttribute('type', 'number');
+      input.setAttribute('step', '0.1');
+      input.setAttribute('id', color);
+      input.value = colorShapeData[0].depth;
+      input.addEventListener('input', (event) => {
+        state.sceneUpdate(Number(event.currentTarget.value), color);
+      });
+
+      item.appendChild(label);
+      item.appendChild(swatch);
+      item.appendChild(input);
+      depthsContainer.appendChild(item);
+    }
+  };
+
+  const download = () => {
+    const exporter = new STLExporter();
+    const zip = new JSZip();
+    for (const [color, colorShapeData] of state.byColor) {
+      const scene = new THREE.Scene();
+      colorShapeData.forEach((data) => {
+        scene.add(data.mesh);
+      });
+      const result = exporter.parse(scene, { binary: false });
+      zip.file(`${color}.stl`, result);
+    }
+    zip
+      .generateAsync({
+        type: 'blob',
+      })
+      .then(function (content) {
+        saveAs(content, 'svg2solid.zip');
+      });
+  };
+
+  return {
+    loadSvg,
+    renderDepthInputs,
+    download,
+  };
+})();
+
+App.loadSvg(exampleSvgData);
+App.renderDepthInputs();
+
+const svgFileInput = document.querySelector('#svgFile');
+const downloadButton = document.querySelector('#download');
+
+svgFileInput.addEventListener('change', function (event) {
+  var reader = new FileReader();
+  reader.onload = function (event) {
+    App.loadSvg(event.target.result);
+    App.renderDepthInputs();
   };
   reader.readAsText(event.target.files[0]);
 });
 
 downloadButton.addEventListener('click', () => {
-  const exporter = new STLExporter();
-  const zip = new JSZip();
-  for (const [color, colorShapeData] of state.byColor) {
-    const scene = new THREE.Scene();
-    colorShapeData.forEach((data) => {
-      scene.add(data.mesh);
-    });
-    const result = exporter.parse(scene, { binary: false });
-    zip.file(`${color}.stl`, result);
-  }
-  zip
-    .generateAsync({
-      type: 'blob',
-    })
-    .then(function (content) {
-      saveAs(content, 'svg2solid.zip');
-    });
+  App.download();
 });

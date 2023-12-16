@@ -31,5 +31,5 @@ export const setupScene = (container) => {
   });
   animate();
 
-  return { scene };
+  return scene;
 };
