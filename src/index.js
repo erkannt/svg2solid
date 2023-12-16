@@ -13,8 +13,24 @@ const app = document.querySelector('#sceneContainer');
 const extrusionInput = document.querySelector('#extrusionDepth');
 const { scene } = setupScene(app);
 const { object, update } = renderSVG(defaultExtrusion, svg);
-
 scene.add(object);
+
+const loadSvg = (object, update) => (svgData) => {
+  const { object, update } = renderSVG(defaultExtrusion, svgData);
+  while (scene.children.length > 0) {
+    scene.remove(scene.children[0]);
+  }
+  scene.add(object);
+};
+
+document.getElementById('svgFile').addEventListener('change', function (event) {
+  var reader = new FileReader();
+  reader.onload = function (event) {
+    var svgData = event.target.result;
+    loadSvg(object, update)(svgData);
+  };
+  reader.readAsText(event.target.files[0]);
+});
 
 extrusionInput.addEventListener('input', () => {
   update(Number(extrusionInput.value));
