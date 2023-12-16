@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
 const stokeMaterial = new THREE.LineBasicMaterial({
-  color: '#00A5E6',
+  color: '#adb5bd',
 });
 
 export const renderSVG = (extrusion, svg) => {
@@ -26,7 +26,7 @@ export const renderSVG = (extrusion, svg) => {
       const lines = new THREE.LineSegments(linesGeometry, stokeMaterial);
 
       updateMap.push({ shape, mesh, lines });
-      svgGroup.add(mesh);
+      svgGroup.add(mesh, lines);
     });
   });
 
