@@ -44,7 +44,7 @@ svgFileInput.addEventListener('change', function (event) {
 });
 
 extrusionInput.addEventListener('input', () => {
-  state.sceneUpdate(Number(extrusionInput.value));
+  state.sceneUpdate(Number(extrusionInput.value), '000000');
 });
 extrusionInput.value = defaultExtrusion;
 

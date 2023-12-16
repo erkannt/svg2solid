@@ -52,8 +52,12 @@ export const renderSVG = (extrusion, svg) => {
   return {
     object: svgGroup,
     byColor,
-    update(extrusion) {
-      updateMap.forEach((updateDetails) => {
+    update(extrusion, colorHex) {
+      const toUpdate = byColor.get(colorHex);
+      console.log('>>>', Array.from(byColor.keys()));
+      console.log('>>>', colorHex);
+      console.log('>>>', toUpdate);
+      toUpdate.forEach((updateDetails) => {
         const meshGeometry = new THREE.ExtrudeGeometry(updateDetails.shape, {
           depth: extrusion,
           bevelEnabled: false,
