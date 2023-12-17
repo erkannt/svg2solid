@@ -29,8 +29,31 @@ const exampleSvgData = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 `;
 
 const App = (() => {
+  const { scene, camera, controls } = setupScene(document.querySelector('#sceneContainer'));
   var state = {
-    scene: setupScene(document.querySelector('#sceneContainer')),
+    scene,
+    camera,
+    controls,
+  };
+
+  const fitCamera = () => {
+    const boundingBox = new THREE.Box3().setFromObject(state.extrusions);
+    const center = boundingBox.getCenter(new THREE.Vector3());
+    const size = boundingBox.getSize(new THREE.Vector3());
+    const offset = 0.5;
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const fov = camera.fov * (Math.PI / 180);
+    const cameraZ = Math.abs((maxDim / 4) * Math.tan(fov * 2)) * offset;
+    const minZ = boundingBox.min.z;
+    const cameraToFarEdge = minZ < 0 ? -minZ + cameraZ : cameraZ - minZ;
+
+    state.controls.target = center;
+    state.controls.maxDistance = cameraToFarEdge * 2;
+    state.controls.minDistance = cameraToFarEdge * 0.5;
+    state.controls.saveState();
+    state.camera.position.z = cameraZ;
+    state.camera.far = cameraToFarEdge * 3;
+    state.camera.updateProjectionMatrix();
   };
 
   const loadSvg = (svgData) => {
@@ -38,6 +61,7 @@ const App = (() => {
     while (state.scene.children.length > 0) {
       state.scene.remove(state.scene.children[0]);
     }
+    state.extrusions = object;
     state.scene.add(object);
     state.sceneUpdate = update;
     state.byColor = byColor;
@@ -91,6 +115,7 @@ const App = (() => {
 
   return {
     loadSvg,
+    fitCamera,
     renderDepthInputs,
     download,
   };
@@ -98,6 +123,7 @@ const App = (() => {
 
 App.loadSvg(exampleSvgData);
 App.renderDepthInputs();
+App.fitCamera();
 
 const svgFileInput = document.querySelector('#svgFile');
 const downloadButton = document.querySelector('#download');
@@ -107,6 +133,7 @@ svgFileInput.addEventListener('change', function (event) {
   reader.onload = function (event) {
     App.loadSvg(event.target.result);
     App.renderDepthInputs();
+    App.fitCamera();
   };
   reader.readAsText(event.target.files[0]);
 });

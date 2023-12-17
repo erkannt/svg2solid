@@ -20,7 +20,7 @@ export const setupScene = (container) => {
   camera.position.z = 50;
   camera.position.x = 50;
   camera.position.y = 50;
-  controls.enablePan = false;
+  controls.enablePan = true;
 
   container.append(renderer.domElement);
   window.addEventListener('resize', () => {
@@ -31,5 +31,5 @@ export const setupScene = (container) => {
   });
   animate();
 
-  return scene;
+  return { scene, camera, controls };
 };
