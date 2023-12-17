@@ -15,6 +15,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-m);
+  margin-bottom: var(--space-2xl);
 }
 
 .application__inputs {
@@ -42,8 +43,15 @@ body {
   }
 }
 
+.tips {
+  ul {
+    margin-bottom: var(--space-m);
+  }
+  margin-bottom: var(--space-m);
+}
+
 footer {
-  border-top: 3px solid var(--red);
+  border-top: 1px solid var(--black);
   padding-top: var(--space-xl);
   margin-top: var(--space-3xl);
 }

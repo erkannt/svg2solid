@@ -39,6 +39,28 @@
 
         <div id="sceneContainer" class="application__rendering"></div>
       </div>
+      <section class="tips">
+        <h2>Tips</h2>
+        <p>Make sure the various colours in the SVG are non-overlapping paths.</p>
+        <p>In Inkscape do the following:</p>
+        <ul>
+          <li>Convert all objects into paths (Paths > Objects to Path)</li>
+          <li>Convert any strokes into paths (Paths > Stroke to path)</li>
+          <li>
+            Duplicate any overlapping colour and subtract it from the covered colour (Edit > Duplicate; Path >
+            Difference)
+          </li>
+        </ul>
+        <p>If you want to have a single coloured base to your object do the following:</p>
+        <ul>
+          <li>Select the colour that bounds your object</li>
+          <li>Duplicate it</li>
+          <li>Path > Break apart</li>
+          <li>Delete all paths inside the bounding path</li>
+          <li>Make it a different colour from all others</li>
+          <li><b>Set depth to a negative number</b></li>
+        </ul>
+      </section>
     </main>
 
     <footer>
