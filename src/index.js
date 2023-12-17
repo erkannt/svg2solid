@@ -77,7 +77,7 @@ const App = (() => {
     for (const [color, colorShapeData] of state.byColor) {
       const scene = new THREE.Scene();
       colorShapeData.forEach((data) => {
-        scene.add(data.mesh);
+        scene.add(data.mesh.clone());
       });
       const result = exporter.parse(scene, { binary: false });
       zip.file(`${color}.stl`, result);
