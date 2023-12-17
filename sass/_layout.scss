@@ -19,12 +19,24 @@ body {
 
 .application__inputs {
   border: 1px solid var(--black);
+  width: 100%;
+  max-width: 20vw;
 }
 
 .application__rendering {
   border: 1px solid var(--black);
-  min-width: 600px;
+  width: 100%;
   min-height: 600px;
+}
+
+@media (min-width: 1000px) {
+  .application {
+    flex-wrap: nowrap;
+  }
+
+  .application__rendering {
+    min-width: 600px;
+  }
 }
 
 footer {
