@@ -25,7 +25,7 @@ export const setupScene = (container) => {
   container.append(renderer.domElement);
   window.addEventListener('resize', () => {
     renderer.setSize(container.offsetWidth, container.offsetHeight);
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.aspect = container.offsetWidth / container.offsetHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
