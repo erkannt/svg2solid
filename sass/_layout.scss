@@ -20,7 +20,6 @@ body {
 .application__inputs {
   border: 1px solid var(--black);
   width: 100%;
-  max-width: 20vw;
 }
 
 .application__rendering {
@@ -32,6 +31,10 @@ body {
 @media (min-width: 1000px) {
   .application {
     flex-wrap: nowrap;
+  }
+
+  .application__inputs {
+    max-width: 20vw;
   }
 
   .application__rendering {
