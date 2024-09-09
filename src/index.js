@@ -77,8 +77,11 @@ const App = (() => {
     for (const [color, colorShapeData] of state.byColor) {
       const scene = new THREE.Scene();
       colorShapeData.forEach((data) => {
-        scene.add(data.mesh.clone());
+        const clone = data.mesh.clone();
+        clone.rotation.z = Math.PI/2;
+        scene.add(clone);
       });
+      scene.updateMatrixWorld(true)
       const result = exporter.parse(scene, { binary: false });
       zip.file(`${color}.stl`, result);
     }
