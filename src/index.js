@@ -83,7 +83,11 @@ const App = (() => {
       });
       scene.updateMatrixWorld(true)
       const result = exporter.parse(scene, { binary: false });
-      zip.file(`${color}.stl`, result);
+      let name = color;
+      if (colorShapeData[0].isBase) {
+        name = 'base';
+      }
+      zip.file(`${name}.stl`, result);
     }
     zip
       .generateAsync({
