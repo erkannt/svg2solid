@@ -52,21 +52,34 @@ const App = (() => {
       const item = document.createElement('li');
       const label = document.createElement('label');
       const swatch = document.createElement('span');
-      const input = document.createElement('input');
+      const input_start = document.createElement('input');
+      const input_end = document.createElement('input');
       label.innerHTML = color;
       label.setAttribute('for', color);
       swatch.setAttribute('style', `background-color: #${color}`);
-      input.setAttribute('type', 'number');
-      input.setAttribute('step', '0.1');
-      input.setAttribute('id', color);
-      input.value = colorShapeData[0].depth;
-      input.addEventListener('input', (event) => {
-        state.sceneUpdate(Number(event.currentTarget.value), color);
+      input_start.setAttribute('type', 'number');
+      input_start.setAttribute('step', '0.1');
+      input_start.setAttribute('id', color + '_start');
+      if(!document.querySelector('#extended').checked) {
+        input_start.setAttribute('style','display: none');
+      }
+      input_start.value = 0;
+      input_end.setAttribute('type', 'number');
+      input_end.setAttribute('step', '0.1');
+      input_end.setAttribute('id', color + '_end');
+      input_end.value = colorShapeData[0].depth;
+
+      input_start.addEventListener('input', (event) => {
+        state.sceneUpdate(Number(document.querySelector('#' + color + '_start').value), Number(document.querySelector('#' + color + '_end').value), color);
+      });
+      input_end.addEventListener('input', (event) => {
+        state.sceneUpdate(Number(document.querySelector('#' + color + '_start').value), Number(document.querySelector('#' + color + '_end').value), color);
       });
 
       item.appendChild(label);
       item.appendChild(swatch);
-      item.appendChild(input);
+      item.appendChild(input_start);
+      item.appendChild(input_end);
       depthsContainer.appendChild(item);
     }
   };
@@ -107,6 +120,7 @@ App.renderDepthInputs();
 App.fitCamera();
 
 const svgFileInput = document.querySelector('#svgFile');
+const extendedConfigInput = document.querySelector('#extended');
 const downloadButton = document.querySelector('#download');
 
 svgFileInput.addEventListener('change', function (event) {
@@ -117,6 +131,11 @@ svgFileInput.addEventListener('change', function (event) {
     App.fitCamera();
   };
   reader.readAsText(event.target.files[0]);
+});
+
+extendedConfigInput.addEventListener('change', function (event) {
+  App.renderDepthInputs();
+  console.log(App.state);
 });
 
 downloadButton.addEventListener('click', () => {

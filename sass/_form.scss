@@ -45,7 +45,10 @@ label {
 
 input {
   display: block;
-  margin-bottom: var(--space-l);
+}
+
+input[type=checkbox] {
+  margin-bottom: var(--space-2xs);
 }
 
 input:last-child {

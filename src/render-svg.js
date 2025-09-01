@@ -53,16 +53,23 @@ export const renderSVG = (svg) => {
   return {
     object: svgGroup,
     byColor,
-    update(extrusion, colorHex) {
-      console.log('>>>', colorHex, extrusion);
+    update(extrusion_from, extrusion_to, colorHex) {
+      console.log('>>>', colorHex, extrusion_from, extrusion_to);
       const toUpdate = byColor.get(colorHex);
       console.log('>>>', toUpdate);
+
+      const extrusion = Math.abs(extrusion_to - extrusion_from);
+      const offset = Math.min(extrusion_from, extrusion_to);
+
       toUpdate.forEach((updateDetails) => {
         const meshGeometry = new THREE.ExtrudeGeometry(updateDetails.shape, {
           depth: extrusion,
           bevelEnabled: false,
         });
         const linesGeometry = new THREE.EdgesGeometry(meshGeometry);
+
+        updateDetails.mesh.position.z = offset;
+        updateDetails.lines.position.z = offset;
 
         updateDetails.mesh.geometry.dispose();
         updateDetails.lines.geometry.dispose();
