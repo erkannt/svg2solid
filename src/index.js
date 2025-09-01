@@ -59,21 +59,21 @@ const App = (() => {
       swatch.setAttribute('style', `background-color: #${color}`);
       input_start.setAttribute('type', 'number');
       input_start.setAttribute('step', '0.1');
-      input_start.setAttribute('id', color + '_start');
+      input_start.setAttribute('id', 'start_' + color);
       if(!document.querySelector('#extended').checked) {
         input_start.setAttribute('style','display: none');
       }
       input_start.value = 0;
       input_end.setAttribute('type', 'number');
       input_end.setAttribute('step', '0.1');
-      input_end.setAttribute('id', color + '_end');
+      input_end.setAttribute('id', 'end_' + color);
       input_end.value = colorShapeData[0].depth;
 
       input_start.addEventListener('input', (event) => {
-        state.sceneUpdate(Number(document.querySelector('#' + color + '_start').value), Number(document.querySelector('#' + color + '_end').value), color);
+        updateSolids();
       });
       input_end.addEventListener('input', (event) => {
-        state.sceneUpdate(Number(document.querySelector('#' + color + '_start').value), Number(document.querySelector('#' + color + '_end').value), color);
+        updateSolids();
       });
 
       item.appendChild(label);
@@ -81,6 +81,12 @@ const App = (() => {
       item.appendChild(input_start);
       item.appendChild(input_end);
       depthsContainer.appendChild(item);
+    }
+  };
+
+  const updateSolids = () => {
+    for (const [color, colorShapeData] of state.byColor) {
+      state.sceneUpdate(Number(document.querySelector('#start_' + color).value), Number(document.querySelector('#end_' + color).value), color);
     }
   };
 
@@ -111,6 +117,7 @@ const App = (() => {
     loadSvg,
     fitCamera,
     renderDepthInputs,
+    updateSolids,
     download,
   };
 })();
@@ -135,7 +142,7 @@ svgFileInput.addEventListener('change', function (event) {
 
 extendedConfigInput.addEventListener('change', function (event) {
   App.renderDepthInputs();
-  console.log(App.state);
+  App.updateSolids();
 });
 
 downloadButton.addEventListener('click', () => {
