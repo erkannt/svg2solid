@@ -52,22 +52,41 @@ const App = (() => {
       const item = document.createElement('li');
       const label = document.createElement('label');
       const swatch = document.createElement('span');
-      const input = document.createElement('input');
+      const input_start = document.createElement('input');
+      const input_end = document.createElement('input');
       label.innerHTML = color;
       label.setAttribute('for', color);
       swatch.setAttribute('style', `background-color: #${color}`);
-      input.setAttribute('type', 'number');
-      input.setAttribute('step', '0.1');
-      input.setAttribute('id', color);
-      input.value = colorShapeData[0].depth;
-      input.addEventListener('input', (event) => {
-        state.sceneUpdate(Number(event.currentTarget.value), color);
+      input_start.setAttribute('type', 'number');
+      input_start.setAttribute('step', '0.1');
+      input_start.setAttribute('id', 'start_' + color);
+      if(!document.querySelector('#extended').checked) {
+        input_start.setAttribute('style','display: none');
+      }
+      input_start.value = colorShapeData[0].depth1;
+      input_end.setAttribute('type', 'number');
+      input_end.setAttribute('step', '0.1');
+      input_end.setAttribute('id', 'end_' + color);
+      input_end.value = colorShapeData[0].depth2;
+
+      input_start.addEventListener('input', (event) => {
+        updateSolids();
+      });
+      input_end.addEventListener('input', (event) => {
+        updateSolids();
       });
 
       item.appendChild(label);
       item.appendChild(swatch);
-      item.appendChild(input);
+      item.appendChild(input_start);
+      item.appendChild(input_end);
       depthsContainer.appendChild(item);
+    }
+  };
+
+  const updateSolids = () => {
+    for (const [color, colorShapeData] of state.byColor) {
+      state.sceneUpdate(Number(document.querySelector('#start_' + color).value), Number(document.querySelector('#end_' + color).value), document.querySelector('#extended').checked, color);
     }
   };
 
@@ -98,6 +117,7 @@ const App = (() => {
     loadSvg,
     fitCamera,
     renderDepthInputs,
+    updateSolids,
     download,
   };
 })();
@@ -107,6 +127,7 @@ App.renderDepthInputs();
 App.fitCamera();
 
 const svgFileInput = document.querySelector('#svgFile');
+const extendedConfigInput = document.querySelector('#extended');
 const downloadButton = document.querySelector('#download');
 
 svgFileInput.addEventListener('change', function (event) {
@@ -117,6 +138,11 @@ svgFileInput.addEventListener('change', function (event) {
     App.fitCamera();
   };
   reader.readAsText(event.target.files[0]);
+});
+
+extendedConfigInput.addEventListener('change', function (event) {
+  App.renderDepthInputs();
+  App.updateSolids();
 });
 
 downloadButton.addEventListener('click', () => {
