@@ -29,9 +29,9 @@ export const renderSVG = (svg) => {
 
       const colorHex = path.color.getHexString();
       if (!byColor.has(colorHex)) {
-        byColor.set(colorHex, [{ mesh, shape, lines, depth: defaultExtrusion }]);
+        byColor.set(colorHex, [{ mesh, shape, lines, depth1: 0, depth2: defaultExtrusion }]);
       } else {
-        byColor.get(colorHex).push({ mesh, shape, lines, depth: defaultExtrusion });
+        byColor.get(colorHex).push({ mesh, shape, lines, depth1: 0, depth2: defaultExtrusion });
       }
 
       updateMap.push({ shape, mesh, lines });
@@ -53,23 +53,27 @@ export const renderSVG = (svg) => {
   return {
     object: svgGroup,
     byColor,
-    update(extrusion_from, extrusion_to, colorHex) {
+    update(extrusion_from, extrusion_to, dual, colorHex) {
       console.log('>>>', colorHex, extrusion_from, extrusion_to);
       const toUpdate = byColor.get(colorHex);
       console.log('>>>', toUpdate);
 
-      const extrusion = Math.abs(extrusion_to - extrusion_from);
-      const offset = Math.min(extrusion_from, extrusion_to);
+      const depth1 = Math.min(extrusion_from, extrusion_to);
+      const depth2 = Math.max(extrusion_from, extrusion_to);
 
       toUpdate.forEach((updateDetails) => {
+
+        updateDetails.depth1 = depth1;
+        updateDetails.depth2 = depth2;
+
         const meshGeometry = new THREE.ExtrudeGeometry(updateDetails.shape, {
-          depth: extrusion,
+          depth: dual ? depth2 - depth1 : depth2,
           bevelEnabled: false,
         });
         const linesGeometry = new THREE.EdgesGeometry(meshGeometry);
 
-        updateDetails.mesh.position.z = offset;
-        updateDetails.lines.position.z = offset;
+        updateDetails.mesh.position.z = dual ? depth1 : 0;
+        updateDetails.lines.position.z = dual ? depth1 : 0;
 
         updateDetails.mesh.geometry.dispose();
         updateDetails.lines.geometry.dispose();

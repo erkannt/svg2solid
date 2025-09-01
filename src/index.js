@@ -63,11 +63,11 @@ const App = (() => {
       if(!document.querySelector('#extended').checked) {
         input_start.setAttribute('style','display: none');
       }
-      input_start.value = 0;
+      input_start.value = colorShapeData[0].depth1;
       input_end.setAttribute('type', 'number');
       input_end.setAttribute('step', '0.1');
       input_end.setAttribute('id', 'end_' + color);
-      input_end.value = colorShapeData[0].depth;
+      input_end.value = colorShapeData[0].depth2;
 
       input_start.addEventListener('input', (event) => {
         updateSolids();
@@ -86,7 +86,7 @@ const App = (() => {
 
   const updateSolids = () => {
     for (const [color, colorShapeData] of state.byColor) {
-      state.sceneUpdate(Number(document.querySelector('#start_' + color).value), Number(document.querySelector('#end_' + color).value), color);
+      state.sceneUpdate(Number(document.querySelector('#start_' + color).value), Number(document.querySelector('#end_' + color).value), document.querySelector('#extended').checked, color);
     }
   };
 
