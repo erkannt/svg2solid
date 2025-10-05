@@ -93,12 +93,39 @@ const App = (() => {
         saveAs(content, 'svg2solid.zip');
       });
   };
+  
+  const downloadMerged = () => {
+      const exporter = new STLExporter();
+
+      // clone the exact object graph you already render
+      const root = state.extrusions?.clone(true);
+      if (!root) {
+        console.warn('[downloadMerged] nothing to export');
+        return;
+      }
+
+      // --- Normalization for STL/slicers ---
+
+      // 1) Lay flat: rotate so Z becomes "up" for slicers
+      // (standing on edge -> rotate around X axis)
+      root.rotation.x = 0;//Math.PI / 2;
+      
+
+      const scene = new THREE.Scene();
+      scene.add(root);
+      scene.updateMatrixWorld(true);
+
+      const stl = exporter.parse(scene, { binary: false });
+      saveAs(new Blob([stl], { type: 'application/vnd.ms-pki.stl' }), 'combined.stl');
+  };
+
 
   return {
     loadSvg,
     fitCamera,
     renderDepthInputs,
     download,
+    downloadMerged,
   };
 })();
 
@@ -108,6 +135,7 @@ App.fitCamera();
 
 const svgFileInput = document.querySelector('#svgFile');
 const downloadButton = document.querySelector('#download');
+const downloadMergedButton = document.querySelector('#download-merged-stl');
 
 svgFileInput.addEventListener('change', function (event) {
   var reader = new FileReader();
@@ -121,4 +149,8 @@ svgFileInput.addEventListener('change', function (event) {
 
 downloadButton.addEventListener('click', () => {
   App.download();
+});
+
+downloadMergedButton.addEventListener('click', () => {
+  App.downloadMerged();
 });
